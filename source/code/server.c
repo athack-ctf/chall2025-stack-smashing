@@ -20,11 +20,9 @@
 
 #define MSG_ASK_FOR_INPUT "What do you think the flag's value is?\n Enter your guess: "
 #define MSGLEN_ASK_FOR_INPUT (strlen(MSG_ASK_FOR_INPUT))
-#define MSG_CORRECT "Why are you asking for the flag if you already have it?\n"
-#define MSGLEN_CORRECT (strlen(MSG_CORRECT))
+
 #define MSG_INCORRECT "You obviously don't have the flag, come back in 5 seconds.\n"
 #define MSGLEN_INCORRECT (strlen(MSG_INCORRECT))
-
 
 char flag_value[MAX_BUF];
 
@@ -111,7 +109,6 @@ int main(int argc, char *argv[]) {
         printf("Asking for flag value.\n");
         if (ask_for_flag_and_check_if_it_is_correct(client_fd, server_fd) == 0) {
             printf("Flag value is correct!\n");
-            send(client_fd, MSG_CORRECT, MSGLEN_CORRECT, 0);
             // Spitting out the flag's value
             send(client_fd, flag_value, strlen(flag_value), 0);
             break; // Exit the loop if the correct string is entered
