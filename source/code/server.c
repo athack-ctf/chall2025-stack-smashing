@@ -10,66 +10,27 @@
 #include <ctype.h>
 
 #define FLAG_FILE "flag.txt"
-#define SHOULD_BE_BIGGER_BUF 16
+#define SHOULD_BE_BIGGER_BUF 64
 #define MAX_BUF 1024
 // Default port number
 #define DEFAULT_PORT 2025
 
-#define MSG_ASK_FOR_INPUT "What do you think the flag's value is?\n"
+#define MSG_BANNER "I only give the flag to those who already have it. Duh!\n"
+#define MSGLEN_BANNER (strlen(MSG_BANNER))
+
+#define MSG_ASK_FOR_INPUT "What do you think the flag's value is?\n Enter your guess: "
 #define MSGLEN_ASK_FOR_INPUT (strlen(MSG_ASK_FOR_INPUT))
-#define MSG_CORRECT "Correct!\n"
+#define MSG_CORRECT "Why are you asking for the flag if you already have it?\n"
 #define MSGLEN_CORRECT (strlen(MSG_CORRECT))
-#define MSG_INCORRECT "Incorrect. Let me sleep for 5 seconds...\n"
+#define MSG_INCORRECT "You obviously don't have the flag, come back in 5 seconds.\n"
 #define MSGLEN_INCORRECT (strlen(MSG_INCORRECT))
 
 
 char flag_value[MAX_BUF];
 
-// Function to check if a string is a valid integer
-int is_valid_port(const char *str) {
-    // Check if the string is empty
-    if (*str == '\0') {
-        return 0;  // Empty string is not a valid port number
-    }
+int is_valid_port(const char *str);
 
-    // Check if every character in the string is a digit
-    for (int i = 0; str[i] != '\0'; i++) {
-        if (!isdigit((unsigned char) str[i])) {
-            return 0;  // Contains non-digit character, so it's not a valid port
-        }
-    }
-
-    // Convert the string to an integer
-    int port = atoi(str);
-
-    // Check if the port is within the valid range (1-65535)
-    if (port >= 1 && port <= 65535) {
-        return 1;  // Valid port
-    }
-
-    return 0;  // Port is out of range
-}
-
-int ask_for_flag_and_check_if_it_is_correct(int client_fd, int server_fd) {
-    ssize_t bytes_read;
-    char small_buffer[SHOULD_BE_BIGGER_BUF];
-    // Ask for a string input
-    send(client_fd, MSG_ASK_FOR_INPUT, MSGLEN_ASK_FOR_INPUT, 0);
-    // Receive the string from the client
-    printf("Reading data...\n");
-    bytes_read = recv(client_fd, small_buffer, MAX_BUF, 0);
-    if (bytes_read == -1) {
-        perror("Recv failed");
-        close(client_fd);
-        close(server_fd);
-        exit(EXIT_FAILURE);
-    }
-    // Remove trailing newline if present
-    small_buffer[bytes_read - 1] = '\0';
-
-    printf("Comparing strings and return the difference...\n");
-    return strcmp(small_buffer, flag_value);
-}
+int ask_for_flag_and_check_if_it_is_correct(int client_fd, int server_fd);
 
 int main(int argc, char *argv[]) {
 
@@ -144,6 +105,7 @@ int main(int argc, char *argv[]) {
 
     printf("Client connected!\n");
 
+    send(client_fd, MSG_BANNER, MSGLEN_BANNER, 0);
     while (1) {
         // Compare the received string with the flag_value from the file
         printf("Asking for flag value.\n");
@@ -167,4 +129,52 @@ int main(int argc, char *argv[]) {
 
     return 0;
 }
+
+
+// Function to check if a string is a valid integer
+int is_valid_port(const char *str) {
+    // Check if the string is empty
+    if (*str == '\0') {
+        return 0;  // Empty string is not a valid port number
+    }
+
+    // Check if every character in the string is a digit
+    for (int i = 0; str[i] != '\0'; i++) {
+        if (!isdigit((unsigned char) str[i])) {
+            return 0;  // Contains non-digit character, so it's not a valid port
+        }
+    }
+
+    // Convert the string to an integer
+    int port = atoi(str);
+
+    // Check if the port is within the valid range (1-65535)
+    if (port >= 1 && port <= 65535) {
+        return 1;  // Valid port
+    }
+
+    return 0;  // Port is out of range
+}
+
+int ask_for_flag_and_check_if_it_is_correct(int client_fd, int server_fd) {
+    ssize_t bytes_read;
+    char small_buffer[SHOULD_BE_BIGGER_BUF];
+    // Ask for a string input
+    send(client_fd, MSG_ASK_FOR_INPUT, MSGLEN_ASK_FOR_INPUT, 0);
+    // Receive the string from the client
+    printf("Reading data...\n");
+    bytes_read = recv(client_fd, small_buffer, MAX_BUF, 0);
+    if (bytes_read == -1) {
+        perror("Recv failed");
+        close(client_fd);
+        close(server_fd);
+        exit(EXIT_FAILURE);
+    }
+    // Remove trailing newline if present
+    small_buffer[bytes_read - 1] = '\0';
+
+    printf("Comparing strings and returning the difference...\n");
+    return strcmp(small_buffer, flag_value);
+}
+
 
