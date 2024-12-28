@@ -1,6 +1,6 @@
 #!/bin/sh
 
 while :; do
-  ./server
+  su -c "/home/chall/server" - chall
   sleep 1
 done
