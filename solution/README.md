@@ -1,10 +1,19 @@
-# How to Solve the Challenge?
+# Solution
+The vulnerability consists of stack-based buffer overflow. Exploiting it requires no complicated payload.
 
-Provide reproducible steps to solve the challenge. This can include:
+## Using `poc.py`
+- Get your python venv ready
+    ```
+    python -m venv venv
+    source venv/bin/activate
+    pip install -r requirements.txt
+    ```
+- Run `poc.py`
+    ```
+    # Replace the ip and port with corresponding ones
+    python poc.py 172.25.0.2 2025
+    ```
 
-- Runnable code (e.g., `PoC.py`)
-- A Bash script or a sequence of commented commands
-- Well-explained instructions
-- ...
+- You should get the flag dumped
 
-Ensure that all dependencies required to build or run the solution are provided (e.g., `requirements.txt`) or thoroughly documented.
+  ![](./flag.png)
