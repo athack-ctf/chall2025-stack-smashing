@@ -20,7 +20,7 @@ cp ./build/server ./chall/server
 cd build
 ./server 2025
 
-# In another terminal, very connection to TCP socket
+# In another terminal, verify connection to TCP socket
 nc 127.0.0.1 2025
 ```
 
