@@ -17,7 +17,14 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-stack-protector -O3 -Wall -Wextra")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -z noexecstack")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_FORTIFY_SOURCE=0")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_FORTIFY_SOURCE=0")
-# Disable compiler optimizations
+
+# Disable PIE (Position Independent Executable) to prevent ASLR
+set(CMAKE_POSITION_INDEPENDENT_CODE OFF)
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -no-pie")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-pic")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-pic")
+
+# Disable compiler optimizations (optional, based on your configuration)
 set(CMAKE_C_FLAGS_RELEASE "-O0")
 set(CMAKE_CXX_FLAGS_RELEASE "-O0")
 
@@ -28,6 +35,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -s")
 # Setting CMAKE_C_STANDARD
 set(CMAKE_C_STANDARD 11)
 
+# Add executable
 add_executable(server code/server.c)
 
 # Strip the executable
@@ -39,4 +47,3 @@ add_custom_command(TARGET server POST_BUILD
         COMMAND ${CMAKE_STRIP} $<TARGET_FILE:server>
         COMMENT "Stripping executable"
         VERBATIM)
-

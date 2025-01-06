@@ -16,27 +16,26 @@
 #define DEFAULT_PORT 2025
 
 #define MSG_BANNER "I only give the flag to those who already have it. Duh!\n"
-#define MSGLEN_BANNER (strlen(MSG_BANNER))
+#define MSGLEN_BANNER (sizeof(MSG_BANNER) - 1)
 
 #define MSG_ASK_FOR_INPUT "What do you think the flag's value is?\n Enter your guess: "
-#define MSGLEN_ASK_FOR_INPUT (strlen(MSG_ASK_FOR_INPUT))
+#define MSGLEN_ASK_FOR_INPUT (sizeof(MSG_ASK_FOR_INPUT) - 1)
 
 #define MSG_INCORRECT "You obviously don't have the flag, come back in 5 seconds.\n"
-#define MSGLEN_INCORRECT (strlen(MSG_INCORRECT))
+#define MSGLEN_INCORRECT (sizeof(MSG_INCORRECT) - 1)
 
 char flag_value[MAX_BUF];
+size_t flag_value_strlen;
+int server_fd, client_fd, port;
+struct sockaddr_in server_addr, client_addr;
+FILE *flag_file;
 
 int is_valid_port(const char *str);
 
-int ask_for_flag_and_check_if_it_is_correct(int client_fd, int server_fd);
+int ask_for_flag_and_check_if_it_is_correct();
 
 int main(int argc, char *argv[]) {
-
-    int server_fd, client_fd, port;
-    struct sockaddr_in server_addr, client_addr;
     socklen_t addr_len = sizeof(client_addr);
-    FILE *flag_file;
-
     // Check if a port is provided in argv[1]
     if (argc > 1) {
         // Validate the port argument
@@ -65,6 +64,7 @@ int main(int argc, char *argv[]) {
 
     // Remove trailing newline character if it exists
     flag_value[strcspn(flag_value, "\n")] = '\0';
+    flag_value_strlen = strlen(flag_value);
 
     fclose(flag_file); // Close the flag.txt file
 
@@ -107,10 +107,10 @@ int main(int argc, char *argv[]) {
     while (1) {
         // Compare the received string with the flag_value from the file
         printf("Asking for flag value.\n");
-        if (ask_for_flag_and_check_if_it_is_correct(client_fd, server_fd) == 0) {
+        if (ask_for_flag_and_check_if_it_is_correct() == 0) {
             printf("Flag value is correct!\n");
             // Spitting out the flag's value
-            send(client_fd, flag_value, strlen(flag_value), 0);
+            send(client_fd, flag_value, flag_value_strlen, 0);
             break; // Exit the loop if the correct string is entered
         } else {
             printf("Flag value is incorrect.\n");
@@ -143,17 +143,17 @@ int is_valid_port(const char *str) {
     }
 
     // Convert the string to an integer
-    int port = atoi(str);
+    int p = atoi(str);
 
     // Check if the port is within the valid range (1-65535)
-    if (port >= 1 && port <= 65535) {
+    if (p >= 1 && p <= 65535) {
         return 1;  // Valid port
     }
 
     return 0;  // Port is out of range
 }
 
-int ask_for_flag_and_check_if_it_is_correct(int client_fd, int server_fd) {
+int ask_for_flag_and_check_if_it_is_correct() {
     ssize_t bytes_read;
     char small_buffer[SHOULD_BE_BIGGER_BUF];
     // Ask for a string input
