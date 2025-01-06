@@ -1,11 +1,11 @@
 from pwn import *
 
-# Default values fo172.25.0.2r IP and port
+# Default IP
 default_ip = '127.0.0.1'
-# default_ip = ''
+# Default port
 default_port = 2025
 
-# Get the IP and port from the command-line arguments or use default values
+# Get the IP and port from CLI args (or use default values)
 target_ip = sys.argv[1] if len(sys.argv) > 1 else default_ip
 target_port = int(sys.argv[2]) if len(sys.argv) > 2 else default_port
 
