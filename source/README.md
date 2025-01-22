@@ -29,9 +29,6 @@ nc 127.0.0.1 2025
 ```
 docker compose up -d --build
 
-# Get ip of the running container (replace <container_id> with concreate value)
-docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' <container_id>
-
-# Verify connection to the TCP socket (replace ip with the obtained ip address)
-nc <ip> 2025
+# Verify connection to the TCP socket (if the container is running remotely, use the right ip and port)
+nc 127.0.0.1 2025
 ```
