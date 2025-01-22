@@ -11,7 +11,7 @@ The vulnerability consists of stack-based buffer overflow. Exploiting it require
 - Run `poc.py`
     ```
     # Replace the ip and port with corresponding ones
-    python poc.py 172.25.0.2 2025
+    python poc.py 127.0.0.1 2025
     ```
 
 - You should get the flag dumped
