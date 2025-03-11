@@ -18,6 +18,7 @@ flags:
 
 tags:
     - beginner
+    - tcp
 
 files:
     - offline-artifacts/server
