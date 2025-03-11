@@ -1,0 +1,27 @@
+name: "Stack Smashing"
+author: "Anis"
+category: Pwn
+description: |
+    After connecting to the TCP server given bellow, a confusing question will await you. Answer it "correctly", 
+    and you'll be rewarded with the flag. Btw, "correctly" is not the answer.
+
+    An identical copy of the binary that guards the flag is at your disposal - you will need to dive into it.
+    
+value: 200
+
+type: standard
+
+flags:
+  - type: "static"
+    content: "ATHACKCTF{0xdeadbeef_5t4ck_8453d_8uff3r_0v3rf10w}"
+    data: "case_insensitive"
+
+tags:
+    - beginner
+
+files:
+    - offline-artifacts/server
+
+state: visible
+
+version: "0.1"
