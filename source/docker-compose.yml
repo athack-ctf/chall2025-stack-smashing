@@ -1,6 +1,8 @@
+version: '3.8'
+
 services:
-  chall:
+  stack-smashing:
     build: .
-    image: chall2025-stack-smashing-1
+    image: athack-ctf/chall2025-stack-smashing
     ports:
       - "2025:2025"
