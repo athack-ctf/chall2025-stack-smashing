@@ -1,10 +1,37 @@
-# How to build/run/connect to the challenge?
+# Running This Challenge
 
-## IMPORTANT
-- If you modify/rebuild the `server` binary, make sure to test/update the solution as well as the offline artifacts.
+## Locally
+
+```
+cd build
+./server 52030
+
+# In another terminal, verify connection to TCP socket
+nc 127.0.0.1 52030
+```
+
+## Using docker
+
+Build
+```
+docker compose up -d --build
+```
+
+Run
+```
+docker run -d --name stack-smashing \
+  -p 52030:2025 \
+  athack-ctf/chall2025-stack-smashing:latest
+```
+
+Verify connection to the TCP socket (if the container is running remotely, use the right ip and port)
+```
+nc 127.0.0.1 52030
+```
 
 ## Compiling `server` binary
 
+**IMPORTANT**: If you modify/rebuild the `server` binary, make sure to test/update the solution as well as the offline artifacts.
 ```
 cd ./build
 cmake ..
@@ -14,21 +41,3 @@ cd ..
 cp ./build/server ./chall/server
 ```
 
-## Running locally
-
-```
-cd build
-./server 2025
-
-# In another terminal, verify connection to TCP socket
-nc 127.0.0.1 2025
-```
-
-## Running using docker compose
-
-```
-docker compose up -d --build
-
-# Verify connection to the TCP socket (if the container is running remotely, use the right ip and port)
-nc 127.0.0.1 2025
-```
