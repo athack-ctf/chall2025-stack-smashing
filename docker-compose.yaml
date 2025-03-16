@@ -2,6 +2,6 @@ version: '3.8'
 services:
   stack-smashing:
     image: athack-ctf/chall2025-stack-smashing:latest
-    build: .
+    build: ./source
     ports:
     - 52030:2025
