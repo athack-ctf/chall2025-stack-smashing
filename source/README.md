@@ -14,7 +14,7 @@ nc 127.0.0.1 52030
 
 Build
 ```
-docker compose up -d --build
+docker build -t athack-ctf/chall2025-stack-smashing:latest .
 ```
 
 Run
